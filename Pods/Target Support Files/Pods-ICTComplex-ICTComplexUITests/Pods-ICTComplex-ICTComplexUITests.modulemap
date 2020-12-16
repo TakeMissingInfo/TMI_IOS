@@ -1,0 +1,6 @@
+framework module Pods_ICTComplex_ICTComplexUITests {
+  umbrella header "Pods-ICTComplex-ICTComplexUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
