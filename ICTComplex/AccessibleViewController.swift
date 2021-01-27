@@ -42,7 +42,6 @@ class AccessibleViewController: UIViewController, UICollectionViewDelegate, UICo
         
         let popUp = storyboard.instantiateViewController(identifier: "SupportViewController") as? SupportViewController
         //SupportViewController
-        popUp?.receivedSection = categories[indexPath.row]
         
         self.dismiss(animated: true, completion: nil)
     }

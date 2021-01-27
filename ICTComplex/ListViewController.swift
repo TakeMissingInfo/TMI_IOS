@@ -35,24 +35,20 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
-            let storyboard = UIStoryboard.init(name: "SelectStoryboard", bundle: nil)
-            
-            let popUp = storyboard.instantiateViewController(identifier: "SelectStoryboard")
-            popUp.modalPresentationStyle = .overCurrentContext
-            popUp.modalTransitionStyle = .crossDissolve
-            
-            self.present(popUp, animated: true, completion: nil)
+        var temp = ""
+        switch indexPath.row {
+        case 0:
+            temp = "DISABLE"
+        case 1:
+            temp = "OLD_MAN"
+        case 2:
+            temp = "LOW_INCOME"
+        case 3:
+            temp = "BOYS_GIRLS_FAMILY"
+        default:
+            print("Error")
         }
-    }
-    @IBAction func selectArea(_ sender: Any) {
-        let storyboard = UIStoryboard.init(name: "area", bundle: nil)
-        
-        let popUp = storyboard.instantiateViewController(identifier: "area")
-        popUp.modalPresentationStyle = .overCurrentContext
-        popUp.modalTransitionStyle = .crossDissolve
-        
-        self.present(popUp, animated: true, completion: nil)
+        SupportViewController.getMainCategory = temp
     }
     
     func resize(getImage:UIImage) -> UIImage {
