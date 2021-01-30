@@ -7,7 +7,6 @@ public struct Place{
         let longitudeX:Double
         let latitudeY:Double
     }
-    
 
 public let DEFAULT_POSITION = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
 class MapViewController: UIViewController, MTMapViewDelegate {
@@ -31,7 +30,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
         super.viewDidLoad()
         
         // 지도 불러오기
-        mapView = MTMapView(frame: subView.frame)
+        mapView = MTMapView(frame: subView.bounds)
         
         if let mapView = mapView {
             mapView.delegate = self
@@ -43,17 +42,27 @@ class MapViewController: UIViewController, MTMapViewDelegate {
             // 현재 위치 트래킹
             //mapView.currentLocationTrackingMode = .onWithoutHeading
             //mapView.showCurrentLocationMarker = true
-            
-            
-            
             self.view.addSubview(mapView)
-
-            let url: URL = URL(string: "https://dapi.kakao.com/v2/local/search/address")!
-
-            let body: NSMutableDictionary = NSMutableDictionary()
-
-            body.setValue("value", forKey: "key")
         }
+    }
+    
+    
+    
+    func mapView(_ mapView: MTMapView!, touchedCalloutBalloonOf poiItem: MTMapPOIItem!) {
+        //https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212
+        let x = poiItem.mapPoint.mapPointGeo().latitude
+        let y = poiItem.mapPoint.mapPointGeo().longitude
+        var url = "https://map.kakao.com/link/to/" + poiItem.itemName + ",\(x),\(y)"
+        let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+        
+        let popUp = storyboard.instantiateViewController(identifier: "LoadViewController")
+        popUp.modalPresentationStyle = .overCurrentContext
+        popUp.modalTransitionStyle = .crossDissolve
+        
+        let temp = popUp as? LoadViewController
+        
+        temp?.receivedUrl = url
+        self.present(popUp, animated: true, completion: nil)
     }
     
     @IBAction func allView(_ sender: Any) {
@@ -89,23 +98,23 @@ class MapViewController: UIViewController, MTMapViewDelegate {
                         print(json)
                         //print(json["data"] as? [String:Any])
                         if let temp = json["data"] as? [String:Any] {
-                            if let temp2 = temp["orderFindResponses"] as? NSArray {
-                                for i in temp2 {
+                            if let bodyData = temp["body"] as? [String:Any] {
+                                if let itemData = bodyData["items"] as? NSArray {
                                     var placeName : String?
                                     var xValue : Double?
                                     var yValue : Double?
-                                   
-                                    if let placeNameStr = temp["placeName"] as? [String:Any] {
-                                        placeName = placeNameStr as! String
-                                    }
-                                    if let xValueStr = temp["competentInstitution"] as? [String:Any] {
-                                        xValue = xValueStr as! Double
-                                    }
-                                    if let yValueStr = temp["supportForm"] as? [String:Any] {
-                                        yValue = yValueStr as! Double
+                                    for i in itemData {
+                                        if let nameStr = i as? [String:Any] {
+                                            placeName = nameStr["fcltyNm"] as! String
+                                        }
+                                        if let x = i as? [String:Any] {
+                                            xValue = x["latitude"] as! Double
+                                        }
+                                        if let y = i as? [String:Any] {
+                                            yValue = y["longitude"] as! Double
+                                        }
                                     }
                                     self.resultList.append(Place(placeName: placeName!, longitudeX: xValue!, latitudeY: yValue!))
-                                    
                                 }
                             }
                         }

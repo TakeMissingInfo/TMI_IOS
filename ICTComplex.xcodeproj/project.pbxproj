@@ -11,6 +11,8 @@
 		365C279D979AD7548496673F /* Pods_ICTComplex.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45606F905D8EDF0B27F22B11 /* Pods_ICTComplex.framework */; };
 		3CADCCF1D22CC679FE7C7C94 /* Pods_ICTComplexTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C473395622C649F62F59F0C /* Pods_ICTComplexTests.framework */; };
 		DA6CC6EF25C00FC800F994E1 /* NetworkController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6CC6EE25C00FC800F994E1 /* NetworkController.swift */; };
+		DA6CC70C25C15FED00F994E1 /* LoadMapStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA6CC70B25C15FED00F994E1 /* LoadMapStoryboard.storyboard */; };
+		DA6CC71125C1600500F994E1 /* LoadMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA6CC71025C1600500F994E1 /* LoadMapViewController.swift */; };
 		DAF8B35625B97EC400830183 /* map_pinup_custom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF8B33125B97EC400830183 /* map_pinup_custom@3x.png */; };
 		DAF8B35725B97EC400830183 /* map_pin_custom.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF8B33225B97EC400830183 /* map_pin_custom.png */; };
 		DAF8B35825B97EC400830183 /* shadow_balloon.png in Resources */ = {isa = PBXBuildFile; fileRef = DAF8B33325B97EC400830183 /* shadow_balloon.png */; };
@@ -96,6 +98,8 @@
 		BB1BE2DB329E42D8495F80E9 /* Pods-ICTComplex-ICTComplexUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICTComplex-ICTComplexUITests.release.xcconfig"; path = "Target Support Files/Pods-ICTComplex-ICTComplexUITests/Pods-ICTComplex-ICTComplexUITests.release.xcconfig"; sourceTree = "<group>"; };
 		CA76C77D8F1BDF65D8F92681 /* Pods-ICTComplex-ICTComplexUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ICTComplex-ICTComplexUITests.debug.xcconfig"; path = "Target Support Files/Pods-ICTComplex-ICTComplexUITests/Pods-ICTComplex-ICTComplexUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		DA6CC6EE25C00FC800F994E1 /* NetworkController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkController.swift; sourceTree = "<group>"; };
+		DA6CC70B25C15FED00F994E1 /* LoadMapStoryboard.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoadMapStoryboard.storyboard; sourceTree = "<group>"; };
+		DA6CC71025C1600500F994E1 /* LoadMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMapViewController.swift; sourceTree = "<group>"; };
 		DAF8B33125B97EC400830183 /* map_pinup_custom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_pinup_custom@3x.png"; sourceTree = "<group>"; };
 		DAF8B33225B97EC400830183 /* map_pin_custom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map_pin_custom.png; sourceTree = "<group>"; };
 		DAF8B33325B97EC400830183 /* shadow_balloon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shadow_balloon.png; sourceTree = "<group>"; };
@@ -338,6 +342,8 @@
 				DAFEAF1D2580B20A008D35C2 /* CommonClassificationCell.swift */,
 				DAFEAF402580D0FE008D35C2 /* WebViewController.swift */,
 				DAF8B38D25B981A200830183 /* MapViewController.swift */,
+				DA6CC70B25C15FED00F994E1 /* LoadMapStoryboard.storyboard */,
+				DA6CC71025C1600500F994E1 /* LoadMapViewController.swift */,
 			);
 			path = ICTComplex;
 			sourceTree = "<group>";
@@ -503,6 +509,7 @@
 				DAF8B35D25B97EC400830183 /* map_pin_shadow@3x.png in Resources */,
 				DAF8B36925B97EC400830183 /* noimage256.png in Resources */,
 				DAFEAE9C257DFB8A008D35C2 /* Main.storyboard in Resources */,
+				DA6CC70C25C15FED00F994E1 /* LoadMapStoryboard.storyboard in Resources */,
 				DAF8B35625B97EC400830183 /* map_pinup_custom@3x.png in Resources */,
 				DAF8B36725B97EC400830183 /* map_pinup_custom.png in Resources */,
 				DAF8B36125B97EC400830183 /* daum_copyright.png in Resources */,
@@ -658,6 +665,7 @@
 				DAFEAF14257FA01C008D35C2 /* ItemCell.swift in Sources */,
 				DAFEAF0A257F5433008D35C2 /* ListViewController.swift in Sources */,
 				DAFEAF05257F4686008D35C2 /* Get.swift in Sources */,
+				DA6CC71125C1600500F994E1 /* LoadMapViewController.swift in Sources */,
 				DAFEAF0F257F5556008D35C2 /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -127,6 +127,46 @@
             </objects>
             <point key="canvasLocation" x="992" y="447"/>
         </scene>
+        <!--Load View Controller-->
+        <scene sceneID="sWF-8V-brL">
+            <objects>
+                <viewController storyboardIdentifier="LoadViewController" id="K5E-LU-7di" customClass="LoadViewController" customModule="ICTComplex" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="SHx-zD-rtV">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6df-mK-Bdr" customClass="CustomButton" customModule="ICTComplex" customModuleProvider="target">
+                                <rect key="frame" x="20" y="64" width="374" height="30"/>
+                                <state key="normal" title="돌아가기"/>
+                                <connections>
+                                    <action selector="back:" destination="K5E-LU-7di" eventType="touchUpInside" id="eAT-FX-c98"/>
+                                </connections>
+                            </button>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KwX-hf-fTO">
+                                <rect key="frame" x="0.0" y="99" width="414" height="797"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </webView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="RPx-Jd-dyz"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="KwX-hf-fTO" firstAttribute="leading" secondItem="RPx-Jd-dyz" secondAttribute="leading" id="7TB-6G-ivZ"/>
+                            <constraint firstItem="6df-mK-Bdr" firstAttribute="leading" secondItem="RPx-Jd-dyz" secondAttribute="leading" constant="20" id="9Mj-Tl-8FP"/>
+                            <constraint firstItem="RPx-Jd-dyz" firstAttribute="trailing" secondItem="6df-mK-Bdr" secondAttribute="trailing" constant="20" id="Dkh-kg-eS1"/>
+                            <constraint firstItem="6df-mK-Bdr" firstAttribute="top" secondItem="RPx-Jd-dyz" secondAttribute="top" constant="20" id="VMJ-RP-qry"/>
+                            <constraint firstAttribute="bottom" secondItem="KwX-hf-fTO" secondAttribute="bottom" id="eOQ-Xf-uSi"/>
+                            <constraint firstItem="RPx-Jd-dyz" firstAttribute="trailing" secondItem="KwX-hf-fTO" secondAttribute="trailing" id="oE3-XB-Mne"/>
+                            <constraint firstItem="KwX-hf-fTO" firstAttribute="top" secondItem="6df-mK-Bdr" secondAttribute="bottom" constant="5" id="wej-3u-T14"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="myWebView" destination="KwX-hf-fTO" id="LTt-am-kIJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uY2-Fz-YO6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1786" y="447"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="zCp-QF-Awh">
             <objects>
