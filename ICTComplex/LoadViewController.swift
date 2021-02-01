@@ -20,7 +20,6 @@ class LoadViewController: UIViewController, UIWebViewDelegate {
            
            // url에 공백이나 한글이 포함되었있을 경우, 에러가 발생하니 url을 인코딩
            let escapedString = url.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-           
            let myUrl = URL(string: escapedString!)
            let myRequest = URLRequest(url: myUrl!)
            myWebView.loadRequest(myRequest)

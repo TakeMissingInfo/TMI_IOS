@@ -3,10 +3,14 @@ import Alamofire
 import SwiftyJSON
 
 public struct Place{
-        let placeName :String
-        let longitudeX:Double
-        let latitudeY:Double
-    }
+    let placeName :String
+    let x:Double
+    let y:Double
+    let address:String
+    let number: String
+    let time: String
+    let date: String
+}
 
 public let DEFAULT_POSITION = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
 class MapViewController: UIViewController, MTMapViewDelegate {
@@ -30,96 +34,106 @@ class MapViewController: UIViewController, MTMapViewDelegate {
         super.viewDidLoad()
         
         // 지도 불러오기
-        mapView = MTMapView(frame: subView.bounds)
+        mapView = MTMapView(frame: subView.frame)
         
         if let mapView = mapView {
             mapView.delegate = self
             mapView.baseMapType = .standard
             
-            // 지도 중심점, 레벨
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  37.443948814883925, longitude: 126.73770385857193)), zoomLevel: 1, animated: true)
-            
             // 현재 위치 트래킹
-            //mapView.currentLocationTrackingMode = .onWithoutHeading
-            //mapView.showCurrentLocationMarker = true
+            mapView.currentLocationTrackingMode = .onWithoutHeading
+            mapView.showCurrentLocationMarker = true
+            //            mapView.addPOIItems([poiItem1,poiItem2]
+            //            mapView.fitAreaToShowAllPOIItems()
             self.view.addSubview(mapView)
         }
     }
     
-    
-    
     func mapView(_ mapView: MTMapView!, touchedCalloutBalloonOf poiItem: MTMapPOIItem!) {
-        //https://map.kakao.com/link/to/카카오판교오피스,37.402056,127.108212
-        let x = poiItem.mapPoint.mapPointGeo().latitude
-        let y = poiItem.mapPoint.mapPointGeo().longitude
-        var url = "https://map.kakao.com/link/to/" + poiItem.itemName + ",\(x),\(y)"
+        let index = poiItem.tag
         let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-        
-        let popUp = storyboard.instantiateViewController(identifier: "LoadViewController")
+        let popUp = storyboard.instantiateViewController(identifier: "detailViewController")
         popUp.modalPresentationStyle = .overCurrentContext
         popUp.modalTransitionStyle = .crossDissolve
+        print(resultList[index].placeName)
         
-        let temp = popUp as? LoadViewController
-        
-        temp?.receivedUrl = url
+        let temp = popUp as? detailViewController
+        temp?.addressStr = resultList[index].address
+        temp?.getX = poiItem.mapPoint.mapPointGeo().latitude
+        temp?.getY = poiItem.mapPoint.mapPointGeo().longitude
+        temp?.dateStr = resultList[index].date
+        temp?.timeStr = resultList[index].time
+        temp?.getName = resultList[index].placeName
+        temp?.numberStr = resultList[index].number
         self.present(popUp, animated: true, completion: nil)
     }
     
     @IBAction func allView(_ sender: Any) {
-        resultList = [Place]()
-        resultList.append(Place(placeName: "신한은행", longitudeX: 37.445962310370994, latitudeY: 126.73758382147876))
-        resultList.append(Place(placeName: "하나로마트", longitudeX: 37.445327528137, latitudeY: 126.735755325721))
-        resultList.append(Place(placeName: "남동아파트", longitudeX: 37.445360325548606, latitudeY: 126.7343087206416))
-        //getCall(selectCode: 0)
-        makeMarker()
+        mapView?.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  resultList[0].x, longitude: resultList[0].y)), zoomLevel: 5, animated: true)
+        makeMarker(code: 0)
     }
     @IBAction func nearView(_ sender: Any) {
-        resultList = [Place]()
-        resultList.append(Place(placeName: "대동아파트", longitudeX: 37.44429779992755, latitudeY: 126.73460629193703))
-        //getCall(selectCode: 1)
-        makeMarker()
+        //        resultList = [Place]()
+        mapView?.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  resultList[0].x, longitude: resultList[0].y)), zoomLevel: 5, animated: true)
+        makeMarker(code: 1)
     }
     
-    func getCall(selectCode : Int) {
+    func getCall() {
         resultList = [Place]()
-        var subUrl = ""
-        if selectCode == 0 {
-            subUrl = ""
-        }
-        else {
-            subUrl = ""
-        }
+        var subUrl = "api/v1/cafeteria/\(37.44960865487391)/\(126.73233856426081)"
+        print("x : \(longitude) y : \(latitude)")
+        //        if selectCode == 0 {
+        //            subUrl = ""
+        //        }
+        //        else {
+        //            subUrl = ""
+        //        }
         let task = URLSession.shared.dataTask(with: URL(string: NetworkController.baseUrl + subUrl)!) { (data, response, error) in
             print("연결!")
             if let dataJson = data {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: dataJson, options: .allowFragments) as? [String: AnyObject]
                     {
-                        print(json)
-                        //print(json["data"] as? [String:Any])
-                        if let temp = json["data"] as? [String:Any] {
-                            if let bodyData = temp["body"] as? [String:Any] {
-                                if let itemData = bodyData["items"] as? NSArray {
-                                    var placeName : String?
-                                    var xValue : Double?
-                                    var yValue : Double?
-                                    for i in itemData {
-                                        if let nameStr = i as? [String:Any] {
-                                            placeName = nameStr["fcltyNm"] as! String
-                                        }
-                                        if let x = i as? [String:Any] {
-                                            xValue = x["latitude"] as! Double
-                                        }
-                                        if let y = i as? [String:Any] {
-                                            yValue = y["longitude"] as! Double
-                                        }
-                                    }
-                                    self.resultList.append(Place(placeName: placeName!, longitudeX: xValue!, latitudeY: yValue!))
+                        if let temp = json["data"] as? NSArray {
+                            var placeName : String?
+                            var xValue : Double?
+                            var yValue : Double?
+                            var placeAddress : String?
+                            var placeNumber = "정보 없음"
+                            var date = "정보 없음"
+                            var time = "정보 없음"
+                            for i in temp {
+                                if let nameStr = i as? [String:Any] {
+                                    placeName = nameStr["facilityName"] as! String
                                 }
+                                if let x = i as? [String:Any] {
+                                    xValue = x["latitude"] as! Double
+                                }
+                                if let y = i as? [String:Any] {
+                                    yValue = y["longitude"] as! Double
+                                }
+                                if let addressStr = i as? [String:Any] {
+                                    placeAddress = addressStr["address"] as! String
+                                }
+                                if let numberStr = i as? [String:Any] {
+                                    if let nS = numberStr["phoneNumber"] as? String {
+                                        placeNumber = nS
+                                    }
+                                }
+                                if let operatingDateStr = i as? [String : Any] {
+                                    if let nS = operatingDateStr["operatingDate"] as? String {
+                                        date = nS
+                                    }
+                                }
+                                if let timeStr = i as? [String : Any] {
+                                    if let nS = timeStr["operatingTime"] as? String {
+                                        time = nS
+                                    }
+                                }
+                                self.resultList.append(Place(placeName: placeName!, x: xValue!, y: yValue!, address: placeAddress!, number: placeNumber, time: time, date: date))
                             }
                         }
                     }
-                    
                 }
                 catch {
                     print("JSON 파상 에러")
@@ -131,46 +145,36 @@ class MapViewController: UIViewController, MTMapViewDelegate {
         task.resume()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        getCall()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
-        let userCircle = circle(latitude: latitude, longitude: longitude)
-        for item in allCircle {
-            mapView!.removeCircle(item)
-        }
-        
         for item in mapView!.poiItems {
             mapView!.remove(item as! MTMapPOIItem)
         }
-        makeMarker()
     }
     
     
-    func makeMarker(){
+    func makeMarker(code : Int){
         for item in mapView!.poiItems {
             mapView!.remove(item as! MTMapPOIItem)
         }
+        var cnt = 0
         for item in resultList {
-            self.mapPoint1 = MTMapPoint(geoCoord: MTMapPointGeo(latitude: item.longitudeX, longitude: item.latitudeY
+            if code == 1 && cnt == 5 {
+                break
+            }
+            self.mapPoint1 = MTMapPoint(geoCoord: MTMapPointGeo(latitude: item.x, longitude: item.y
             ))
             poiItem1 = MTMapPOIItem()
             poiItem1?.markerType = MTMapPOIItemMarkerType.redPin
             poiItem1?.mapPoint = mapPoint1
             poiItem1?.itemName = item.placeName
+            poiItem1?.tag = cnt
             mapView!.add(poiItem1)
+            cnt += 1
         }
-    }
-    
-    func circle(latitude:Double, longitude:Double) -> MTMapCircle {
-        let circ = MTMapCircle()
-        circ.circleCenterPoint = MTMapPoint(geoCoord:
-                                                MTMapPointGeo(latitude: latitude.magnitude, longitude: longitude.magnitude)
-        )
-        circ.circleRadius = Float(50)
-        circ.circleLineColor = UIColor.red
-        circ.circleLineWidth = 5
-        circ.circleFillColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0)
-        circ.tag = 1
-        
-        return circ
     }
     
     
@@ -178,21 +182,15 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     func mapView(_ mapView: MTMapView!, updateCurrentLocation location: MTMapPoint!, withAccuracy accuracy: MTMapLocationAccuracy) {
         let currentLocation = location?.mapPointGeo()
         if let latitude = currentLocation?.latitude.magnitude, let longitude = currentLocation?.longitude.magnitude{
-            print("MTMapView updateCurrentLocation (\(latitude),\(longitude)) accuracy (\(accuracy))")
             self.latitude = latitude
             self.longitude = longitude
-            let userCircle = circle(latitude: latitude, longitude: longitude)
-            for item in allCircle {
-                mapView.removeCircle(item)
-            }
-            allCircle = [MTMapCircle]()
-            allCircle.append(circle(latitude: latitude, longitude: longitude))
-            mapView.addCircle(allCircle[0])
+            
         }
+        // 지도 중심점, 레벨
+        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  37.44960865487391, longitude: 126.73233856426081)), zoomLevel: 5, animated: true)
         
     }
     
     func mapView(_ mapView: MTMapView?, updateDeviceHeading headingAngle: MTMapRotationAngle) {
-        print("MTMapView updateDeviceHeading (\(headingAngle)) degrees")
     }
 }
