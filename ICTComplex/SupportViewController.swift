@@ -104,8 +104,11 @@ class SupportViewController: UIViewController, XMLParserDelegate,UITableViewDele
     override func viewDidLoad() {
         super.viewDidLoad()
         print(getStr.count)
+        
         TableMain.delegate = self
         TableMain.dataSource = self
+        
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

@@ -8,11 +8,12 @@
 import UIKit
 
 class detailViewController: UIViewController {
-
+    
     @IBOutlet var number: UILabel!
     @IBOutlet var address: UILabel!
     @IBOutlet var operation: UILabel!
     @IBOutlet var time: UILabel!
+    
     var addressStr: String?
     var numberStr: String?
     var dateStr: String?
@@ -23,6 +24,7 @@ class detailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         if let a = addressStr {
             address.text = a
         }

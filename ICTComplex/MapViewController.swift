@@ -19,6 +19,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     var mapView: MTMapView?
     
     var resultList=[Place]()
+    var isNear = false
     
     var mapPoint1: MTMapPoint?
     var poiItem1: MTMapPOIItem?
@@ -32,7 +33,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
         // 지도 불러오기
         mapView = MTMapView(frame: subView.frame)
         
@@ -43,8 +44,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
             // 현재 위치 트래킹
             mapView.currentLocationTrackingMode = .onWithoutHeading
             mapView.showCurrentLocationMarker = true
-            //            mapView.addPOIItems([poiItem1,poiItem2]
-            //            mapView.fitAreaToShowAllPOIItems()
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  latitude, longitude: longitude)), zoomLevel: 5, animated: true)
             self.view.addSubview(mapView)
         }
     }
@@ -69,25 +69,23 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     }
     
     @IBAction func allView(_ sender: Any) {
-        mapView?.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  resultList[0].x, longitude: resultList[0].y)), zoomLevel: 5, animated: true)
+        isNear = false
+        getCall()
         makeMarker(code: 0)
     }
     @IBAction func nearView(_ sender: Any) {
         //        resultList = [Place]()
-        mapView?.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  resultList[0].x, longitude: resultList[0].y)), zoomLevel: 5, animated: true)
+        //mapView?.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  resultList[0].x, longitude: resultList[0].y)), zoomLevel: 5, animated: true)
+        isNear = true
+        getCall()
         makeMarker(code: 1)
     }
     
     func getCall() {
         resultList = [Place]()
-        var subUrl = "api/v1/cafeteria/\(37.44960865487391)/\(126.73233856426081)"
-        print("x : \(longitude) y : \(latitude)")
-        //        if selectCode == 0 {
-        //            subUrl = ""
-        //        }
-        //        else {
-        //            subUrl = ""
-        //        }
+        var subUrl = "api/v1/cafeteria/\(latitude)/\(longitude)"
+        print("URL : " + subUrl)
+        var cnt = 0
         let task = URLSession.shared.dataTask(with: URL(string: NetworkController.baseUrl + subUrl)!) { (data, response, error) in
             print("연결!")
             if let dataJson = data {
@@ -131,6 +129,11 @@ class MapViewController: UIViewController, MTMapViewDelegate {
                                     }
                                 }
                                 self.resultList.append(Place(placeName: placeName!, x: xValue!, y: yValue!, address: placeAddress!, number: placeNumber, time: time, date: date))
+                                cnt += 1
+                                if cnt == 30 {
+                                    break
+                                }
+                        
                             }
                         }
                     }
@@ -141,12 +144,19 @@ class MapViewController: UIViewController, MTMapViewDelegate {
                 }
                 print("JSON 파싱 완료")
             }
+            DispatchQueue.main.async {
+                var code = 0
+                if self.isNear {
+                    code = 1
+                }
+                self.makeMarker(code: code)
+            }
         }
         task.resume()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getCall()
+        //getCall()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -157,6 +167,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     
     
     func makeMarker(code : Int){
+        print("코드 : \(code)")
         for item in mapView!.poiItems {
             mapView!.remove(item as! MTMapPOIItem)
         }
@@ -186,8 +197,6 @@ class MapViewController: UIViewController, MTMapViewDelegate {
             self.longitude = longitude
             
         }
-        // 지도 중심점, 레벨
-        mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  37.44960865487391, longitude: 126.73233856426081)), zoomLevel: 5, animated: true)
         
     }
     

@@ -31,8 +31,10 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
         cell.stack.layer.borderWidth = 1
         cell.stack.layer.cornerRadius = 5
         cell.stack.layer.borderColor = UIColor.lightGray.cgColor
+        //cell.backgroundColor = #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
         return cell
     }
+    
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var temp = ""
@@ -72,10 +74,11 @@ class ListViewController: UIViewController, UICollectionViewDelegate, UICollecti
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         screenSize = UIScreen.main.bounds
         screenWidth = screenSize.width
         screenHeight = screenSize.height
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
+        
         
 //        let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
 //        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)

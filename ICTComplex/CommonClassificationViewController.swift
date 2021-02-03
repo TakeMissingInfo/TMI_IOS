@@ -33,6 +33,7 @@ class CommonClassificationViewController: UIViewController, UICollectionViewDele
         
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CommonClassificationCell", for: indexPath) as! CommonClassificationCell
     
@@ -154,13 +155,17 @@ class CommonClassificationViewController: UIViewController, UICollectionViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.selectStr.text = "분류를 선택하세요"
         self.selectStr.textColor = UIColor.lightGray
         self.nextButton.isUserInteractionEnabled = false
         self.nextButton.backgroundColor = #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         self.nextButton.setTitleColor(.lightGray, for: .normal)
+        
         CollectionViewMain.dataSource = self
         CollectionViewMain.delegate = self
+        
+        self.navigationController?.navigationBar.tintColor = #colorLiteral(red: 0.4392156899, green: 0.01176470611, blue: 0.1921568662, alpha: 1)
     }
     
 }
