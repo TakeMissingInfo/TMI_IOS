@@ -2,17 +2,8 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-public struct Place{
-    let placeName :String
-    let x:Double
-    let y:Double
-    let address:String
-    let number: String
-    let time: String
-    let date: String
-}
 
-public let DEFAULT_POSITION = MTMapPointGeo(latitude: 37.576568, longitude: 127.029148)
+public let DEFAULT_POSITION = MTMapPointGeo(latitude: 37.456518177069526, longitude: 126.70531256589555)
 class MapViewController: UIViewController, MTMapViewDelegate {
     
     @IBOutlet var subView: UIView!
@@ -26,8 +17,8 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     
     let session: URLSession = URLSession.shared
     
-    var latitude : Double = 0.0
-    var longitude : Double = 0.0
+    var latitude : Double = 37.576568
+    var longitude : Double = 127.029148
     
     var allCircle = [MTMapCircle]()
     
@@ -42,9 +33,9 @@ class MapViewController: UIViewController, MTMapViewDelegate {
             mapView.baseMapType = .standard
             
             // 현재 위치 트래킹
-            mapView.currentLocationTrackingMode = .onWithoutHeading
-            mapView.showCurrentLocationMarker = true
-            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  latitude, longitude: longitude)), zoomLevel: 5, animated: true)
+            //mapView.currentLocationTrackingMode = .onWithoutHeading
+            //mapView.showCurrentLocationMarker = true
+            mapView.setMapCenter(MTMapPoint(geoCoord: MTMapPointGeo(latitude:  37.456518177069526, longitude: 126.70531256589555)), zoomLevel: 5, animated: true)
             self.view.addSubview(mapView)
         }
     }
@@ -83,7 +74,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     
     func getCall() {
         resultList = [Place]()
-        var subUrl = "api/v1/cafeteria/\(latitude)/\(longitude)"
+        var subUrl = "api/v1/cafeteria/\(37.456518177069526)/\(126.70531256589555)"
         print("URL : " + subUrl)
         var cnt = 0
         let task = URLSession.shared.dataTask(with: URL(string: NetworkController.baseUrl + subUrl)!) { (data, response, error) in
@@ -93,6 +84,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
                     if let json = try JSONSerialization.jsonObject(with: dataJson, options: .allowFragments) as? [String: AnyObject]
                     {
                         if let temp = json["data"] as? NSArray {
+                            print(temp)
                             var placeName : String?
                             var xValue : Double?
                             var yValue : Double?
@@ -179,6 +171,7 @@ class MapViewController: UIViewController, MTMapViewDelegate {
             self.mapPoint1 = MTMapPoint(geoCoord: MTMapPointGeo(latitude: item.x, longitude: item.y
             ))
             poiItem1 = MTMapPOIItem()
+            print(item.placeName)
             poiItem1?.markerType = MTMapPOIItemMarkerType.redPin
             poiItem1?.mapPoint = mapPoint1
             poiItem1?.itemName = item.placeName
@@ -190,15 +183,15 @@ class MapViewController: UIViewController, MTMapViewDelegate {
     
     
     // Custom: 현 위치 트래킹 함수
-    func mapView(_ mapView: MTMapView!, updateCurrentLocation location: MTMapPoint!, withAccuracy accuracy: MTMapLocationAccuracy) {
-        let currentLocation = location?.mapPointGeo()
-        if let latitude = currentLocation?.latitude.magnitude, let longitude = currentLocation?.longitude.magnitude{
-            self.latitude = latitude
-            self.longitude = longitude
-            
-        }
-        
-    }
+//    func mapView(_ mapView: MTMapView!, updateCurrentLocation location: MTMapPoint!, withAccuracy accuracy: MTMapLocationAccuracy) {
+//        let currentLocation = location?.mapPointGeo()
+//        if let latitude = currentLocation?.latitude.magnitude, let longitude = currentLocation?.longitude.magnitude{
+//            self.latitude = latitude
+//            self.longitude = longitude
+//
+//        }
+//
+//    }
     
     func mapView(_ mapView: MTMapView?, updateDeviceHeading headingAngle: MTMapRotationAngle) {
     }

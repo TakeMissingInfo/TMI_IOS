@@ -53,12 +53,14 @@ class SupportViewController: UIViewController, XMLParserDelegate,UITableViewDele
         print(NetworkController.baseUrl + "api/v1/weakperson/" + SupportViewController.getMainCategory + "?" + subCategory)
         
         let task = URLSession.shared.dataTask(with: URL(string: NetworkController.baseUrl + "api/v1/weakperson/" + SupportViewController.getMainCategory + "?" + subCategory)!) { (data, response, error) in
-            print("연결!")
+           
             if let dataJson = data {
                 do {
                     if let json = try JSONSerialization.jsonObject(with: dataJson, options: .allowFragments) as? [String: AnyObject]
                     {
+                        
                         if let temp = json["data"] as? NSArray {
+                            print(temp)
                                 for i in temp {
                                     var name : String?
                                     var competentInstitution : String?

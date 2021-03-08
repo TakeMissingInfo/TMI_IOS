@@ -8,5 +8,5 @@
 import Foundation
 
 class NetworkController {
-    static let baseUrl = "http://3db104344553.ngrok.io/"
+    static let baseUrl = "http://localhost:8080/"
 }
